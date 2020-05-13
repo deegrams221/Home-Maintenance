@@ -1,30 +1,58 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, Button, FlatList} from 'react-native';
+import MaintenanceItem from './components/MaintenanceItem';
+import MaintenanceInput from './components/MaintenanceInput';
 
 export default function App() {
-  const [outputText, setOutputText] = useState('Open up App.js to start working on your app!');
+  const [maintenanceItems, setMaintenanceItems] = useState([]);
+  const [isAddMode, setIsAddMode] = useState(false);
+
+  // add
+  const addItemHandler = (itemTitle) => {
+    setMaintenanceItems(currentItems => [
+      ...currentItems,
+      {id: Math.random().toString(), value: itemTitle}
+    ]);
+    setIsAddMode(false);
+  };
+
+  // delete
+  const removeItemHandler = itemId => {
+    setMaintenanceItems(currentItems => {
+      return currentItems.filter((item) => item.id !== itemId);
+    });
+  }
+
+  // cancel
+  const cancelItemAdditionHandler = () => {
+    setIsAddMode(false);
+  };
+
   return (
-    // use <View> as a wrapper
-    <View style={{padding}}>
-      {/* Nesting <View> to build UI layout */}
-      <View>
-        <TextInput />
-        <Button title="ADD" />
-      </View>
-      <View>
-      <Button title="DELETE" />
-      </View>
+    <View style={styles.screen}>
+      <Button title="Add New Item" onPress={() => setIsAddMode(true)} />
+      <MaintenanceInput
+        visible={isAddMode}
+        onAddItem={addItemHandler}
+        onCancel={cancelItemAdditionHandler}
+      />
+      <FlatList
+        keyExtractor={(item, index) => item.id}
+        data={maintenanceItems}
+        renderItem={itemData => (
+          <MaintenanceItem
+            id={itemData.item.id}
+            onDelete={removeItemHandler}
+            title={itemData.item.value}
+          />
+        )}
+      />
     </View>
   );
 }
 
-// React Native uses StyleSheets based on CSS but is not CSS
-// Written in Javascript
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  screen: {
+    padding: 50
+  }
 });
