@@ -13,6 +13,11 @@ const MaintenanceInput = props => {
     setEnteredItem('');
   };
 
+  const deleteItemHandler = () => {
+    props.onDeleteItem(enteredItem);
+    setEnteredItem('');
+  };
+
   return (
     <Modal visible={props.visible} animationType="slide">
       <View style={styles.inputContainer}>
@@ -28,6 +33,9 @@ const MaintenanceInput = props => {
           </View>
           <View style={styles.button}>
             <Button style={styles.button} title="ADD" onPress={addItemHandler} />
+          </View>
+          <View style={styles.button}>
+            <Button style={styles.button} title="Delete" onPress={deleteItemHandler} />
           </View>
         </View>
       </View>
