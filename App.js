@@ -8,7 +8,7 @@ export default function App() {
   const [isAddMode, setIsAddMode] = useState(false);
 
   // add
-  const addItemHandler = (itemTitle) => {
+  const addItemHandler = itemTitle => {
     setMaintenanceItems(currentItems => [
       ...currentItems,
       {id: Math.random().toString(), value: itemTitle}
